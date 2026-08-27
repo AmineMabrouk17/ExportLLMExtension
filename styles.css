@@ -1,0 +1,25 @@
+/* AI Studio to Markdown Exporter - injected button styling */
+.btn-export-md {
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  white-space: nowrap;
+}
+
+.btn-export-md:hover {
+  background: #1765cc;
+}
+
+.btn-export-md:active {
+  background: #1456b0;
+}

@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "LLM Chat to Markdown Exporter",
+  "version": "1.1",
+  "description": "Export conversations from Google AI Studio, Claude, and GLM/Z.ai to clean Markdown files.",
+  "permissions": ["activeTab"],
+  "icons": {
+    "16": "assets/icon16.png",
+    "32": "assets/icon32.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Export this conversation to Markdown",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "32": "assets/icon32.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://aistudio.google.com/*",
+        "https://claude.ai/*",
+        "https://*.claude.ai/*",
+        "https://chatglm.cn/*",
+        "https://*.chatglm.cn/*",
+        "https://z.ai/*",
+        "https://*.z.ai/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
