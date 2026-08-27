@@ -2,85 +2,89 @@
 
 ![LLM Chat to Markdown Exporter logo](assets/icon128.png)
 
-# LLM Chat → Markdown Exporter
+# 💬 LLM Chat → Markdown Exporter
 
-**Save any AI chat as a clean Markdown file — in one click.**
+**Save any AI conversation as a clean, tidy Markdown file — with one click.**
 
-Works on **Google AI Studio**, **Claude**, and **GLM / Z.ai**.
+Works with **Google AI Studio**, **Claude**, and **GLM / Z.ai**.
 
 </div>
 
 ---
 
-## What this does
+## Why you'll love it ✨
 
-This is a tiny Chrome extension that turns a conversation from a supported AI
-chat site into a clean **`.md` (Markdown)** file you can keep, read, or edit
-anywhere. It grabs the messages, code blocks, formatting, links, and (where
-available) the AI's reasoning, while leaving out all the buttons and clutter.
+Ever had a great AI chat that you wanted to keep — and found yourself copying text
+till your fingers hurt? This tiny Chrome extension solves that. It grabs the whole
+conversation (messages, code, formatting, even the AI's reasoning) and saves it as
+a neat **`.md` file** to your computer. No buttons, no clutter, no copy-pasting.
 
-| Site | Where |
+## Where it works
+
+| 💬 Chat site | 🌐 Website |
 | --- | --- |
-| Google AI Studio | `aistudio.google.com` |
-| Claude | `claude.ai` |
-| GLM / Z.ai | `chatglm.cn`, `z.ai` |
+| **Google AI Studio** | [aistudio.google.com](https://aistudio.google.com/) |
+| **Claude** | [claude.ai](https://claude.ai/) |
+| **GLM / Z.ai** | [chat.z.ai](https://chat.z.ai/) · [chatglm.cn](https://www.chatglm.cn/) |
 
 ---
 
-## Install it (one time)
+## Install it — once 🛠️
+
+Doing this takes about a minute, and you'll only ever do it once.
 
 1. Open **`chrome://extensions`** in your browser.
-2. Turn on **Developer mode** (top-right switch).
+2. Turn on the **Developer mode** switch in the top-right corner.
 3. Click **Load unpacked**.
 4. Pick the `LLMExport` folder you unzipped.
-5. Make sure the extension card is **enabled**.
+5. Make sure the extension is switched **on**.
 
-> You only do this once. After that, the button appears automatically whenever
-> you open a supported chat.
-
----
-
-## Use it (every time)
-
-Open a chat on one of the supported sites, then export it in **any** of these
-three ways:
-
-- **Click the floating 📥 Export MD button** (top-right of the page), **or**
-- **Click the extension's toolbar icon**, **or**
-- Press **`Ctrl + Shift + E`** (on Mac: **`Cmd + Shift + E`**).
-
-A `.md` file downloads to your **Downloads** folder, named after the
-conversation title. That's it.
+That's it! The download button will now appear automatically whenever you open a
+supported chat.
 
 ---
 
-## Tips
+## Use it — every time 🚀
 
-- **Long AI Studio chats:** the exporter automatically scrolls through the whole
-  conversation so every message is captured — no need to scroll manually.
-- **"This site isn't supported":** you're on a host the extension doesn't know
-  yet — open one of the supported sites above.
-- **Nothing happens?** Try the keyboard shortcut or the toolbar icon. If those
-  work, the page was still loading — just reload.
-- **Changed your mind after exporting?** The downloaded `.md` is a normal text
-  file — open it in any editor and tweak it.
+Open a chat on any supported site, then save it in whichever way you like:
+
+- **Click the floating "Export MD" button** at the top-right of the page, **or**
+- **Click the extension icon** in your browser toolbar, **or**
+- Press **Ctrl + Shift + E** (on Mac: **Cmd + Shift + E**)
+
+The file lands in your **Downloads** folder, already named after your
+conversation. Done!
 
 ---
 
-## What gets saved
+## Handy tips 💡
 
-- Each message, labelled **👤 User** or **🤖 Assistant**.
-- Code blocks (with language), **bold/italic** text, lists, links, quotes.
-- The AI's **reasoning / thought process** (collapsed under a "Thought Process"
-  section where the site shows it).
-- On AI Studio: math formulas and cited **sources**.
+- **Very long chats?** No problem — the exporter scrolls through the whole
+  conversation by itself, so nothing gets left behind.
+- **Seeing "This site isn't supported"?** You're on a site the extension doesn't
+  know yet. Head to one of the supported sites above.
+- **Nothing happens when you click?** Try the keyboard shortcut or the toolbar
+  icon instead. Still nothing? The page may have been still loading — just reload.
+- **Want to change something afterwards?** The saved file is a plain text file —
+  open it in any editor and edit away.
 
-## What does NOT get saved
+---
 
-- Copy / edit / retry buttons, thumbs-up/down, and other on-screen controls.
+## What you get 📄
+
+- Every message, clearly labelled **👤 You** and **🤖 AI**.
+- Code blocks (with the language!), **bold/italic** text, lists, links, and quotes.
+- The AI's **reasoning / thought process**, kept neatly under its own section
+  when the site shows it.
+- On AI Studio: math formulas and cited **sources** — all preserved.
+
+## What you don't get 🧹
+
+- Copy/edit/retry buttons, thumbs-up/down icons, and other on-screen clutter.
 - Hidden screen-reader text.
 
 ---
 
-*Questions or a site you'd like added? The extension auto-detects the site, so
-most additions are just a small settings tweak away.*
+*Questions, or a site you'd like added? The extension detects sites
+automatically, so most additions are just a small tweak away. Open an issue and
+we'll look into it — 💜 thanks for using it!*
