@@ -56,8 +56,8 @@ conversation title. That's it.
 
 ## Tips
 
-- **Long AI Studio chats:** if a message seems missing, scroll to the bottom of
-  the chat once, then export again (AI Studio only renders what's on screen).
+- **Long AI Studio chats:** the exporter automatically scrolls through the whole
+  conversation so every message is captured — no need to scroll manually.
 - **"This site isn't supported":** you're on a host the extension doesn't know
   yet — open one of the supported sites above.
 - **Nothing happens?** Try the keyboard shortcut or the toolbar icon. If those

@@ -288,73 +288,122 @@ function extractChatToMarkdown() {
   }
 
   const title = adapter.title();
-  let markdown = `# ${title}\n\n`;
-
   const turns = adapter.turns();
   if (!turns || turns.length === 0) {
     alert("No conversation messages found on this page.");
     return;
   }
 
-  turns.forEach((turn) => {
-    const role = adapter.classify(turn) === "user" ? "### 👤 User" : "### 🤖 Assistant";
-    markdown += `${role}\n\n`;
-
-    if (adapter.thought) {
-      const thoughtMd = adapter.thought(turn);
-      if (thoughtMd) {
-        markdown += `<details>\n<summary>Thought Process</summary>\n\n${thoughtMd}\n\n</details>\n\n`;
-      }
-    }
-
-    const bodies = adapter.body(turn);
-    bodies.forEach((b) => {
-      const chunkMd = getChildrenMarkdown(b).trim();
-      if (chunkMd) markdown += `${chunkMd}\n\n`;
-    });
-
-    if (adapter.sources) {
-      const src = adapter.sources(turn);
-      if (src) markdown += src;
-    }
-
-    markdown += `---\n\n`;
-  });
-
+  let markdown = `# ${title}\n\n`;
+  turns.forEach((turn) => (markdown += renderTurn(adapter, turn)));
   markdown = markdown.replace(/\n{3,}/g, "\n\n").trim() + "\n";
   downloadMarkdownFile(title, markdown);
 }
 
 /* --------------------------------------------------- virtual-scroll guard */
 
-// AI Studio lazy-renders turns; scroll through to force them into the DOM.
-function ensureAllTurnsLoaded() {
+// AI Studio lazy-renders turns inside a virtual scroller: only a small window
+// of <ms-chat-turn> nodes exists in the DOM at any moment, and the ones you
+// scroll away from are destroyed. A blind "scroll to the bottom, then read the
+// DOM" approach silently DROPS messages from long chats.
+//
+// The reliable fix is to serialize each turn to markdown the moment it becomes
+// visible, while sweeping down the whole conversation, then dedupe by text. We
+// accumulate the rendered markdown so nothing is lost, even though old turns
+// leave the DOM.
+function scrollAndCollectMarkdown(adapter) {
   return new Promise((resolve) => {
     const scroller =
       document.querySelector("ms-chat-scroll-viewport") ||
       document.querySelector(".cdk-virtual-scroll-viewport") ||
       document.querySelector("mat-sidenav-content .scroll-container");
-    if (!scroller) return resolve();
-    let step = 0;
-    const total = 40;
-    const tick = () => {
-      const max = scroller.scrollHeight - scroller.clientHeight;
-      if (step >= total || scroller.scrollTop >= max - 2) {
-        scroller.scrollTop = 0;
-        return resolve();
-      }
-      scroller.scrollTop = Math.min(scroller.scrollTop + 600, max);
-      step++;
-      setTimeout(tick, 60);
+
+    // No scroll container → fall back to a plain DOM read.
+    if (!scroller) return resolve(extractChatToMarkdown());
+
+    // Serialize immediately, while the node is still live in the DOM. The
+    // virtual scroller may destroy turns after we scroll past them, so we can
+    // never rely on reading them again at the end. Dedupe by rendered body.
+    const seenMd = new Set();
+    const mdParts = [];
+    const harvest = () => {
+      document.querySelectorAll("ms-chat-turn").forEach((turn) => {
+        try {
+          const key = turn.textContent.trim().replace(/\s+/g, " ");
+          if (!key) return;
+          const md = renderTurn(adapter, turn);
+          if (!seenMd.has(key)) {
+            seenMd.add(key);
+            mdParts.push(md);
+          }
+        } catch (_) {
+          /* ignore malformed nodes */
+        }
+      });
     };
-    tick();
+
+    const step = Math.max(400, scroller.clientHeight * 0.8);
+    const MAX_TOTAL = 60;
+
+    const sweepDown = (pos, passes) => {
+      harvest();
+      const max = scroller.scrollHeight - scroller.clientHeight;
+      if (passes >= MAX_TOTAL || pos >= max) {
+        // Hit the bottom; settle on the last turn so none remains half-drawn.
+        scroller.scrollTop = max;
+        harvest();
+        return resolve(buildMarkdown(adapter, mdParts));
+      }
+      scroller.scrollTop = pos;
+      setTimeout(() => sweepDown(Math.min(pos + step, max), passes + 1), 50);
+    };
+
+    sweepDown(0, 0);
   });
+}
+
+function renderTurn(adapter, turn) {
+  const role = adapter.classify(turn) === "user" ? "### 👤 User" : "### 🤖 Assistant";
+  let md = `${role}\n\n`;
+
+  if (adapter.thought) {
+    const thoughtMd = adapter.thought(turn);
+    if (thoughtMd) {
+      md += `<details>\n<summary>Thought Process</summary>\n\n${thoughtMd}\n\n</details>\n\n`;
+    }
+  }
+
+  adapter.body(turn).forEach((b) => {
+    const chunkMd = getChildrenMarkdown(b).trim();
+    if (chunkMd) md += `${chunkMd}\n\n`;
+  });
+
+  if (adapter.sources) {
+    const src = adapter.sources(turn);
+    if (src) md += src;
+  }
+
+  return `${md}---\n\n`;
+}
+
+function buildMarkdown(adapter, mdParts) {
+  const title = adapter.title();
+  let markdown = `# ${title}\n\n`;
+  mdParts.forEach((md) => (markdown += md));
+  return markdown.replace(/\n{3,}/g, "\n\n").trim() + "\n";
+}
+
+function extractChatToMarkdownStreamed() {
+  const adapter = getActiveAdapter();
+  if (!adapter) return extractChatToMarkdown();
+  scrollAndCollectMarkdown(adapter).then((md) =>
+    downloadMarkdownFile(adapter.title(), md)
+  );
 }
 
 async function exportWithScroll() {
   if (getActiveAdapter() && getActiveAdapter().name === "Google AI Studio") {
-    await ensureAllTurnsLoaded();
-    setTimeout(extractChatToMarkdown, 150);
+    extractChatToMarkdownStreamed();
   } else {
     extractChatToMarkdown();
   }
