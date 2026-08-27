@@ -25,7 +25,7 @@ a neat **`.md` file** to your computer. No buttons, no clutter, no copy-pasting.
 | --- | --- |
 | **Google AI Studio** | [aistudio.google.com](https://aistudio.google.com/) |
 | **Claude** | [claude.ai](https://claude.ai/) |
-| **GLM / Z.ai** | [chat.z.ai](https://chat.z.ai/) · [chatglm.cn](https://www.chatglm.cn/) |
+| **GLM / Z.ai** | [chat.z.ai](https://chat.z.ai/) |
 
 ---
 
